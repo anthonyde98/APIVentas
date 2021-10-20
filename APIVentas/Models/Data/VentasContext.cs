@@ -238,6 +238,11 @@ namespace APIVentas.Models.Data
                     .HasColumnType("decimal(6, 2)")
                     .HasColumnName("ganancia");
 
+                entity.Property(e => e.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("nombre");
+
                 entity.Property(e => e.Peso)
                     .HasColumnType("decimal(5, 2)")
                     .HasColumnName("peso");

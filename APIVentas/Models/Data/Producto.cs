@@ -26,6 +26,7 @@ namespace APIVentas.Models.Data
         public string Empresa { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaModificacion { get; set; }
+        public string Nombre { get; set; }
 
         public virtual ProductoCategoria Categoria { get; set; }
         public virtual ICollection<DetalleOrdenVenta> DetalleOrdenVenta { get; set; }
