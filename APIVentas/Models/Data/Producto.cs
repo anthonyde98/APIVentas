@@ -14,6 +14,7 @@ namespace APIVentas.Models.Data
 
         public int ProductoId { get; set; }
         public string ProductoCodigo { get; set; }
+        public string Nombre { get; set; }
         public decimal PrecioEstandar { get; set; }
         public decimal PrecioLista { get; set; }
         public decimal Ganancia { get; set; }
@@ -26,7 +27,6 @@ namespace APIVentas.Models.Data
         public string Empresa { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaModificacion { get; set; }
-        public string Nombre { get; set; }
 
         public virtual ProductoCategoria Categoria { get; set; }
         public virtual ICollection<DetalleOrdenVenta> DetalleOrdenVenta { get; set; }

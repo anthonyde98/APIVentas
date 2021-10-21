@@ -7,5 +7,6 @@ namespace APIVentas.Services.Clientes
 {
     public interface ICliente
     {
+
     }
 }
