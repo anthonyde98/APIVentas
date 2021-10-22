@@ -40,11 +40,11 @@ namespace APIVentas.Models.Data
             modelBuilder.Entity<Cliente>(entity =>
             {
                 entity.HasKey(e => e.ClienteCodigo)
-                    .HasName("PK__Cliente__A062A53BFB033872");
+                    .HasName("PK__Cliente__A062A53B5B1B4F00");
 
                 entity.ToTable("Cliente");
 
-                entity.HasIndex(e => e.Cedula, "UQ__Cliente__415B7BE541A577E4")
+                entity.HasIndex(e => e.Cedula, "UQ__Cliente__415B7BE5BD896F8A")
                     .IsUnique();
 
                 entity.Property(e => e.ClienteCodigo)
@@ -100,18 +100,18 @@ namespace APIVentas.Models.Data
             modelBuilder.Entity<DetalleOrdenVenta>(entity =>
             {
                 entity.HasKey(e => e.DetalleOrdenVentaCodigo)
-                    .HasName("PK__DetalleO__B25A58E1B9C09DFE");
+                    .HasName("PK__DetalleO__B25A58E12E795E77");
 
                 entity.Property(e => e.DetalleOrdenVentaCodigo)
                     .HasMaxLength(7)
                     .HasColumnName("detalleOrdenVentaCodigo");
 
                 entity.Property(e => e.DescuentoTotal)
-                    .HasColumnType("decimal(6, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("descuentoTotal");
 
                 entity.Property(e => e.DetalleOrdenVentaId)
-                    .ValueGeneratedOnAdd()
+                    .ValueGeneratedOnAddOrUpdate()
                     .HasColumnName("detalleOrdenVentaId");
 
                 entity.Property(e => e.FechaCreacion)
@@ -132,14 +132,13 @@ namespace APIVentas.Models.Data
                 entity.HasOne(d => d.ProductoCodigoNavigation)
                     .WithMany(p => p.DetalleOrdenVenta)
                     .HasForeignKey(d => d.ProductoCodigo)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Producto");
             });
 
             modelBuilder.Entity<OrdenVenta>(entity =>
             {
                 entity.HasKey(e => e.OrdenVentaCodigo)
-                    .HasName("PK__OrdenVen__5D4D5DFFBE352D81");
+                    .HasName("PK__OrdenVen__5D4D5DFFF60FE2C4");
 
                 entity.Property(e => e.OrdenVentaCodigo)
                     .HasMaxLength(7)
@@ -151,7 +150,7 @@ namespace APIVentas.Models.Data
                     .HasColumnName("clienteCodigo");
 
                 entity.Property(e => e.DescuentoTotalOrden)
-                    .HasColumnType("decimal(6, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("descuentoTotalOrden");
 
                 entity.Property(e => e.FechaCreacion)
@@ -167,23 +166,23 @@ namespace APIVentas.Models.Data
                     .HasColumnName("ordenFecha");
 
                 entity.Property(e => e.OrdenVentaId)
-                    .ValueGeneratedOnAdd()
+                    .ValueGeneratedOnAddOrUpdate()
                     .HasColumnName("ordenVentaId");
 
                 entity.Property(e => e.ValorCantidadBruto)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(10, 2)")
                     .HasColumnName("valorCantidadBruto");
 
                 entity.Property(e => e.ValorCantidadNeto)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(10, 2)")
                     .HasColumnName("valorCantidadNeto");
 
                 entity.Property(e => e.ValorDevuelto)
-                    .HasColumnType("decimal(7, 2)")
+                    .HasColumnType("decimal(9, 2)")
                     .HasColumnName("valorDevuelto");
 
                 entity.Property(e => e.ValorPagado)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(10, 2)")
                     .HasColumnName("valorPagado");
 
                 entity.Property(e => e.VendedorCodigo)
@@ -194,20 +193,18 @@ namespace APIVentas.Models.Data
                 entity.HasOne(d => d.ClienteCodigoNavigation)
                     .WithMany(p => p.OrdenVenta)
                     .HasForeignKey(d => d.ClienteCodigo)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Cliente");
 
                 entity.HasOne(d => d.VendedorCodigoNavigation)
                     .WithMany(p => p.OrdenVenta)
                     .HasForeignKey(d => d.VendedorCodigo)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Vendedor");
             });
 
             modelBuilder.Entity<Producto>(entity =>
             {
                 entity.HasKey(e => e.ProductoCodigo)
-                    .HasName("PK__Producto__D778113BA87C6CD9");
+                    .HasName("PK__Producto__D778113BED91D089");
 
                 entity.ToTable("Producto");
 
@@ -218,12 +215,12 @@ namespace APIVentas.Models.Data
                 entity.Property(e => e.CategoriaId).HasColumnName("categoriaId");
 
                 entity.Property(e => e.Descuento)
-                    .HasColumnType("decimal(6, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("descuento");
 
                 entity.Property(e => e.Empresa)
                     .IsRequired()
-                    .HasMaxLength(20)
+                    .HasMaxLength(80)
                     .HasColumnName("empresa");
 
                 entity.Property(e => e.FechaCreacion)
@@ -243,7 +240,7 @@ namespace APIVentas.Models.Data
                     .HasColumnName("fechaModificacion");
 
                 entity.Property(e => e.Ganancia)
-                    .HasColumnType("decimal(6, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("ganancia");
 
                 entity.Property(e => e.Nombre)
@@ -252,41 +249,40 @@ namespace APIVentas.Models.Data
                     .HasColumnName("nombre");
 
                 entity.Property(e => e.Peso)
-                    .HasColumnType("decimal(5, 2)")
+                    .HasColumnType("decimal(7, 2)")
                     .HasColumnName("peso");
 
                 entity.Property(e => e.PrecioEstandar)
-                    .HasColumnType("decimal(6, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("precioEstandar");
 
                 entity.Property(e => e.PrecioLista)
-                    .HasColumnType("decimal(6, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("precioLista");
 
                 entity.Property(e => e.ProductoId)
-                    .ValueGeneratedOnAdd()
+                    .ValueGeneratedOnAddOrUpdate()
                     .HasColumnName("productoId");
 
                 entity.Property(e => e.Tamanio)
-                    .HasColumnType("decimal(5, 2)")
+                    .HasColumnType("decimal(7, 2)")
                     .HasColumnName("tamanio");
 
                 entity.HasOne(d => d.Categoria)
                     .WithMany(p => p.Productos)
                     .HasForeignKey(d => d.CategoriaId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Categoria");
             });
 
             modelBuilder.Entity<ProductoCategoria>(entity =>
             {
                 entity.HasKey(e => e.CategoriaId)
-                    .HasName("PK__Producto__6378C0C0B799A100");
+                    .HasName("PK__Producto__6378C0C050ABBB55");
 
-                entity.HasIndex(e => e.Nombre, "UQ__Producto__72AFBCC69D59F150")
+                entity.HasIndex(e => e.Nombre, "UQ__Producto__72AFBCC69D426055")
                     .IsUnique();
 
-                entity.HasIndex(e => e.CategoriaCodigo, "UQ__Producto__CA40B18B41529E7E")
+                entity.HasIndex(e => e.CategoriaCodigo, "UQ__Producto__CA40B18B8D96550B")
                     .IsUnique();
 
                 entity.Property(e => e.CategoriaId).HasColumnName("categoriaId");
@@ -309,7 +305,7 @@ namespace APIVentas.Models.Data
                     .HasColumnName("fechaModificacion");
 
                 entity.Property(e => e.Impuesto)
-                    .HasColumnType("decimal(2, 2)")
+                    .HasColumnType("decimal(4, 2)")
                     .HasColumnName("impuesto");
 
                 entity.Property(e => e.Nombre)
@@ -321,11 +317,11 @@ namespace APIVentas.Models.Data
             modelBuilder.Entity<Vendedor>(entity =>
             {
                 entity.HasKey(e => e.VendedorCodigo)
-                    .HasName("PK__Vendedor__55FBDA7E80840077");
+                    .HasName("PK__Vendedor__55FBDA7EFB1B475C");
 
                 entity.ToTable("Vendedor");
 
-                entity.HasIndex(e => e.Cedula, "UQ__Vendedor__415B7BE58BF481F1")
+                entity.HasIndex(e => e.Cedula, "UQ__Vendedor__415B7BE5E42F4E4F")
                     .IsUnique();
 
                 entity.Property(e => e.VendedorCodigo)
@@ -353,7 +349,7 @@ namespace APIVentas.Models.Data
                     .HasColumnName("correo");
 
                 entity.Property(e => e.DeduccionTotal)
-                    .HasColumnType("decimal(6, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("deduccionTotal");
 
                 entity.Property(e => e.Departamento)
@@ -384,11 +380,11 @@ namespace APIVentas.Models.Data
                     .HasColumnName("numeroTelefono");
 
                 entity.Property(e => e.SalarioBruto)
-                    .HasColumnType("decimal(6, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("salarioBruto");
 
                 entity.Property(e => e.SalarioNeto)
-                    .HasColumnType("decimal(6, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("salarioNeto");
 
                 entity.Property(e => e.SeguroCodigo)
@@ -397,7 +393,7 @@ namespace APIVentas.Models.Data
                     .HasColumnName("seguroCodigo");
 
                 entity.Property(e => e.VendedorId)
-                    .ValueGeneratedOnAdd()
+                    .ValueGeneratedOnAddOrUpdate()
                     .HasColumnName("vendedorId");
             });
 

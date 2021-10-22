@@ -1,5 +1,4 @@
-﻿using APIVentas.Services.Productos;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,43 +12,218 @@ namespace APIVentas.Controllers
     [ApiController]
     public class ProductosController : ControllerBase
     {
-        public readonly IProducto ProductoManager;
+        public readonly Services.Productos.IProducto ProductoManager;
+        public readonly Services.Productos.ProductoCategorias.IProductoCategoria ProductoCategoriaManager;
 
-        public ProductosController(IProducto productoManager)
+        public ProductosController(Services.Productos.IProducto productoManager,
+            Services.Productos.ProductoCategorias.IProductoCategoria productoCategoriaManager)
         {
             ProductoManager = productoManager;
+            ProductoCategoriaManager = productoCategoriaManager;
         }
 
         // GET: api/<ProductosController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                var Productos = await ProductoManager.Buscar();
+
+                return Ok(Productos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // GET api/<ProductosController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{codigo}")]
+        public async Task<IActionResult> Get(string codigo)
         {
-            return "value";
+            try
+            {
+                var respuesta = await ProductoManager.Existe(codigo);
+
+                if (!respuesta)
+                    return NotFound();
+
+                var Producto = await ProductoManager.Buscar(codigo);
+
+                return Ok(Producto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST api/<ProductosController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] Models.DTOs.Producto.InputProductoDTO nuevoPrducto)
         {
+            try
+            {
+                var Producto = await ProductoManager.Crear(nuevoPrducto);
+
+                return Created("Producto", Producto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // PUT api/<ProductosController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{codigo}")]
+        public async Task<IActionResult> Put(string codigo, [FromBody] Models.DTOs.Producto.InputProductoDTO nuevaInfoProducto)
         {
+            try
+            {
+                var respuesta = await ProductoManager.Existe(codigo);
+
+                if (!respuesta)
+                    return NotFound();
+
+                var Producto = await ProductoManager.Editar(codigo, nuevaInfoProducto);
+
+                return Ok(Producto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE api/<ProductosController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{codigo}")]
+        public async Task<IActionResult> Delete(string codigo)
         {
+            try
+            {
+                var respuesta = await ProductoManager.Existe(codigo);
+
+                if (!respuesta)
+                    return NotFound();
+
+                var codigoProducto = await ProductoManager.Eliminar(codigo);
+
+                return Ok(new { message = "El producto " + codigoProducto + " fue eliminado con exito." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //-------------------------------------------PRODUCTO CATEGORIA-------------------------------------------//
+        //--------------------------------------------------------------------------------------------------------//
+        [HttpGet]
+        [Route("Categorias/")]
+        public async Task<IActionResult> GetAllCategorias()
+        {
+            try
+            {
+                var Categorias = await ProductoCategoriaManager.Buscar();
+
+                return Ok(Categorias);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("Categorias/{codigo}")]
+        public async Task<IActionResult> GetCategoria(string codigo)
+        {
+            try
+            {
+                var respuesta = await ProductoCategoriaManager.Existe(codigo);
+
+                if (!respuesta)
+                    return NotFound();
+
+                var Categoria = await ProductoCategoriaManager.Buscar(codigo);
+
+                return Ok(Categoria);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("Categorias/")]
+        public async Task<IActionResult> PostCategoria([FromBody] Models.DTOs.Producto.ProductoCategoria.InputProductoCategoriaDTO nuevaCategoria)
+        {
+            try
+            {
+                var Categoria = await ProductoCategoriaManager.Crear(nuevaCategoria);
+
+                return Created("Categoria", Categoria);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("Categorias/{codigo}")]
+        public async Task<IActionResult> PutCategoria(string codigo, [FromBody] Models.DTOs.Producto.ProductoCategoria.InputProductoCategoriaDTO nuevaInfoCategoria)
+        {
+            try
+            {
+                var respuesta = await ProductoCategoriaManager.Existe(codigo);
+
+                if (!respuesta)
+                    return NotFound();
+
+                var Categoria = await ProductoCategoriaManager.Editar(codigo, nuevaInfoCategoria);
+
+                return Ok(Categoria);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("Categorias/{codigo}")]
+        public async Task<IActionResult> DeleteCategoria(string codigo)
+        {
+            try
+            {
+                var respuesta = await ProductoCategoriaManager.Existe(codigo);
+
+                if (!respuesta)
+                    return NotFound();
+
+                var codigoCategoria = await ProductoCategoriaManager.Eliminar(codigo);
+
+                return Ok(new { message = "La categoria " + codigoCategoria + " fue eliminado con exito." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("Categorias/DropDown/")]
+        public async Task<IActionResult> GetDropDown()
+        {
+            try
+            {
+                var Categorias = await ProductoCategoriaManager.BuscarDropDown();
+
+                return Ok(Categorias);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

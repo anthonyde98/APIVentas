@@ -107,7 +107,7 @@ namespace APIVentas.Controllers
 
                 var codigoCliente = await ClienteManager.Eliminar(codigo);
 
-                return Ok(new { message = "El cliente " + codigo + " fue eliminado con exito." });
+                return Ok(new { message = "El cliente " + codigoCliente + " fue eliminado con exito." });
             }
             catch (Exception ex)
             {

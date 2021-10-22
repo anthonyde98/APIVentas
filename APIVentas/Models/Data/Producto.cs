@@ -20,7 +20,7 @@ namespace APIVentas.Models.Data
         public decimal Ganancia { get; set; }
         public decimal Tamanio { get; set; }
         public decimal Peso { get; set; }
-        public decimal? Descuento { get; set; }
+        public decimal Descuento { get; set; }
         public int CategoriaId { get; set; }
         public DateTime FechaInicioVenta { get; set; }
         public DateTime FechaFinVenta { get; set; }

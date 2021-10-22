@@ -30,6 +30,7 @@ namespace APIVentas
             services.AddDbContext<VentasContext>();
             services.AddTransient<Services.Clientes.ICliente, Services.Clientes.Cliente>()
                 .AddTransient<Services.Productos.IProducto, Services.Productos.Producto>()
+                .AddTransient<Services.Productos.ProductoCategorias.IProductoCategoria, Services.Productos.ProductoCategorias.ProductoCategoria>()
                 .AddTransient<Services.Vendedores.IVendedor, Services.Vendedores.Vendedor>()
                 .AddTransient<Services.Ventas.IVenta, Services.Ventas.Venta>();
 

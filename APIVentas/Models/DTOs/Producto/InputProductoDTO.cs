@@ -14,8 +14,8 @@ namespace APIVentas.Models.DTOs.Producto
         public decimal Peso { get; set; }
         public decimal Descuento { get; set; }
         public int CategoriaId { get; set; }
-        public DateTime FechaInicioVenta { get; set; }
-        public DateTime FechaFinVenta { get; set; }
+        public string FechaInicioVenta { get; set; }
+        public string FechaFinVenta { get; set; }
         public string Empresa { get; set; }
     }
 }

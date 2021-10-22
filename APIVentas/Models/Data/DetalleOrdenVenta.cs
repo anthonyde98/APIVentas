@@ -11,7 +11,7 @@ namespace APIVentas.Models.Data
         public string DetalleOrdenVentaCodigo { get; set; }
         public string ProductoCodigo { get; set; }
         public int ProductoCantidad { get; set; }
-        public decimal? DescuentoTotal { get; set; }
+        public decimal DescuentoTotal { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaModificacion { get; set; }
 

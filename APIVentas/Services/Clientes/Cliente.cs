@@ -136,24 +136,24 @@ namespace APIVentas.Services.Clientes
             return nuevoCliente;
         }
 
-        public async Task<Models.DTOs.Cliente.InputClienteDTO> Editar(string codigo, Models.DTOs.Cliente.InputClienteDTO nuevoInfoCliente)
+        public async Task<Models.DTOs.Cliente.OutputClienteDTO> Editar(string codigo, Models.DTOs.Cliente.InputClienteDTO nuevoInfoCliente)
         {
             var clienteActual = await DbContext.Clientes.FindAsync(codigo);
 
             clienteActual.ClienteCodigo = codigo;
-            clienteActual.Nombres = nuevoInfoCliente.Nombres;
-            clienteActual.Apellidos = nuevoInfoCliente.Apellidos;
-            clienteActual.Cedula = nuevoInfoCliente.Cedula;
-            clienteActual.Correo = nuevoInfoCliente.Correo;
-            clienteActual.NumeroTelefono = nuevoInfoCliente.NumeroTelefono;
-            clienteActual.Direccion = nuevoInfoCliente.Direccion;
+            clienteActual.Nombres = nuevoInfoCliente.Nombres == null ? clienteActual.Nombres : nuevoInfoCliente.Nombres;
+            clienteActual.Apellidos = nuevoInfoCliente.Apellidos == null ? clienteActual.Apellidos : nuevoInfoCliente.Apellidos;
+            clienteActual.Cedula = nuevoInfoCliente.Cedula == null ? clienteActual.Cedula : nuevoInfoCliente.Cedula;
+            clienteActual.Correo = nuevoInfoCliente.Correo == null ? clienteActual.Correo : nuevoInfoCliente.Correo;
+            clienteActual.NumeroTelefono = nuevoInfoCliente.NumeroTelefono == null ? clienteActual.NumeroTelefono : nuevoInfoCliente.NumeroTelefono;
+            clienteActual.Direccion = nuevoInfoCliente.Direccion == null ? clienteActual.Direccion : nuevoInfoCliente.Direccion;
             clienteActual.FechaModificacion = DateTime.Now;
 
             DbContext.Update(clienteActual);
 
             await DbContext.SaveChangesAsync();
 
-            return nuevoInfoCliente;
+            return await Buscar(codigo);
         }
 
         public async Task<string> Eliminar(string codigo)

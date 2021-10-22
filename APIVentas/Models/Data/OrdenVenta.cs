@@ -14,7 +14,7 @@ namespace APIVentas.Models.Data
         public decimal ValorCantidadBruto { get; set; }
         public decimal ValorPagado { get; set; }
         public decimal ValorDevuelto { get; set; }
-        public decimal? DescuentoTotalOrden { get; set; }
+        public decimal DescuentoTotalOrden { get; set; }
         public string VendedorCodigo { get; set; }
         public string ClienteCodigo { get; set; }
         public DateTime FechaCreacion { get; set; }
