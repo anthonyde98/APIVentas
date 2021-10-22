@@ -62,7 +62,7 @@ namespace APIVentas.Models.Data
                     .HasColumnName("cedula");
 
                 entity.Property(e => e.ClienteId)
-                    .ValueGeneratedOnAdd()
+                    .ValueGeneratedOnAddOrUpdate()
                     .HasColumnName("clienteId");
 
                 entity.Property(e => e.Correo)

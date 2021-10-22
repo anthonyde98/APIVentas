@@ -26,7 +26,9 @@ namespace APIVentas.Controllers
         {
             try
             {
-                return Ok();
+                var Clientes = await ClienteManager.Buscar();
+
+                return Ok(Clientes);
             }
             catch (Exception ex)
             {
@@ -35,28 +37,82 @@ namespace APIVentas.Controllers
         }
 
         // GET api/<ClientesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{codigo}")]
+        public async Task<IActionResult> Get(string codigo)
         {
-            return "value";
+            try
+            {
+                var respuesta = await ClienteManager.Existe(codigo);
+
+                if (!respuesta)
+                    return NotFound();
+
+                var Cliente = await ClienteManager.Buscar(codigo);
+
+                return Ok(Cliente);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST api/<ClientesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] Models.DTOs.Cliente.InputClienteDTO nuevoCliente)
         {
+            try
+            {
+                var Cliente = await ClienteManager.Crear(nuevoCliente);
+
+                return Created("Cliente", Cliente);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // PUT api/<ClientesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{codigo}")]
+        public async Task<IActionResult> Put(string codigo, [FromBody] Models.DTOs.Cliente.InputClienteDTO nuevaInfoCliente)
         {
+            try
+            {
+                var respuesta = await ClienteManager.Existe(codigo);
+
+                if (!respuesta)
+                    return NotFound();
+
+                var Cliente = await ClienteManager.Editar(codigo, nuevaInfoCliente);
+
+                return Ok(Cliente);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE api/<ClientesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{codigo}")]
+        public async Task<IActionResult> Delete(string codigo)
         {
+            try
+            {
+                var respuesta = await ClienteManager.Existe(codigo);
+
+                if (!respuesta)
+                    return NotFound();
+
+                var codigoCliente = await ClienteManager.Eliminar(codigo);
+
+                return Ok(new { message = "El cliente " + codigo + " fue eliminado con exito." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

@@ -33,6 +33,10 @@ namespace APIVentas
                 .AddTransient<Services.Vendedores.IVendedor, Services.Vendedores.Vendedor>()
                 .AddTransient<Services.Ventas.IVenta, Services.Ventas.Venta>();
 
+            services.AddMvc().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.IgnoreNullValues = true ;               
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
