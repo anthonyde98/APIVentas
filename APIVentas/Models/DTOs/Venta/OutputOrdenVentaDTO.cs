@@ -14,8 +14,8 @@ namespace APIVentas.Models.DTOs.Venta
         public decimal ValorPagado { get; set; }
         public decimal ValorDevuelto { get; set; }
         public decimal DescuentoTotalOrden { get; set; }
-        public string VendedorCodigo { get; set; }
-        public string ClienteCodigo { get; set; }
-        public List<DetalleOrdenVentaDTO> Productos { get; set; }
+        public string VendedorNombre { get; set; }
+        public string ClienteNombre { get; set; }
+        public List<DetalleOrdenVenta.OutputDetalleOrdenVentaDTO> Productos { get; set; }
     }
 }

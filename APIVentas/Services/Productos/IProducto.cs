@@ -7,7 +7,7 @@ namespace APIVentas.Services.Productos
 {
     public interface IProducto
     {
-        Task<List<Models.DTOs.Producto.OutputProductoDTO>> Buscar();
+        Task<List<Models.DTOs.Producto.OutputProductoDTO>> Buscar(int cantidad, int pagina);
         Task<Models.DTOs.Producto.OutputProductoDTO> Buscar(string codigo);
         Task<bool> Existe(string codigo);
         Task<string> CrearCodigo(string nombre);

@@ -17,10 +17,18 @@ namespace APIVentas.Services.Clientes
             DbContext = dbContext;
         }
 
-        public async Task<List<Models.DTOs.Cliente.OutputClienteDTO>> Buscar()
+        public async Task<List<Models.DTOs.Cliente.OutputClienteDTO>> Buscar(int cantidad, int pagina)
         {
-            var Clientes = from cliente in DbContext.Clientes
-                           select new Models.DTOs.Cliente.OutputClienteDTO()
+            pagina = (pagina <= 0) ? 1 : pagina;
+            cantidad = (cantidad <= 0) ? 10 : cantidad;
+
+
+            var totalRecords = await DbContext.Clientes.CountAsync();
+            var totalPages = Math.Ceiling((double)totalRecords / cantidad);
+
+            var skip = (pagina - 1) * cantidad;
+
+            var Clientes = DbContext.Clientes.Skip(skip).Take(cantidad).Select(cliente => new Models.DTOs.Cliente.OutputClienteDTO()
                            {
                                ClienteCodigo = cliente.ClienteCodigo,
                                NombreCompleto = cliente.Nombres + " " + cliente.Apellidos,
@@ -28,25 +36,9 @@ namespace APIVentas.Services.Clientes
                                NumeroTelefono = cliente.NumeroTelefono,
                                Direccion = cliente.Direccion,
                                MembresiaCodigo = cliente.MembresiaCodigo
-                           };
+                           }).OrderBy(o => o.NombreCompleto);
 
             return await Clientes.ToListAsync();
-        }
-
-        public async Task<Models.DTOs.Cliente.OutputClienteDTO> Buscar(string codigo)
-        {
-            var Cliente = from cliente in DbContext.Clientes
-                           where cliente.ClienteCodigo == codigo
-                           select new Models.DTOs.Cliente.OutputClienteDTO()
-                           {
-                               NombreCompleto = cliente.Nombres + " " + cliente.Apellidos,
-                               Correo = cliente.Correo,
-                               NumeroTelefono = cliente.NumeroTelefono,
-                               Direccion = cliente.Direccion,
-                               MembresiaCodigo = cliente.MembresiaCodigo
-                           };
-
-            return await Cliente.SingleOrDefaultAsync();
         }
 
         public async Task<bool> Existe(string codigo)
@@ -54,6 +46,22 @@ namespace APIVentas.Services.Clientes
             var respuesta = await DbContext.Clientes.AnyAsync(c => c.ClienteCodigo == codigo);
   
             return respuesta;
+        }
+
+        public async Task<Models.DTOs.Cliente.OutputClienteDTO> Buscar(string codigo)
+        {
+            var Cliente = from cliente in DbContext.Clientes
+                          where cliente.ClienteCodigo == codigo
+                          select new Models.DTOs.Cliente.OutputClienteDTO()
+                          {
+                              NombreCompleto = cliente.Nombres + " " + cliente.Apellidos,
+                              Correo = cliente.Correo,
+                              NumeroTelefono = cliente.NumeroTelefono,
+                              Direccion = cliente.Direccion,
+                              MembresiaCodigo = cliente.MembresiaCodigo
+                          };
+
+            return await Cliente.SingleOrDefaultAsync();
         }
 
         public async Task<string> CrearCodigo(string nombre, string apellido)
@@ -115,6 +123,10 @@ namespace APIVentas.Services.Clientes
         {
             string clienteCodigo = await CrearCodigo(nuevoCliente.Nombres, nuevoCliente.Apellidos);
             string membresiaCodigo = await CrearMembresiaCodigo();
+            var existeCedula = await DbContext.Clientes.AnyAsync(c => c.Cedula == nuevoCliente.Cedula);
+
+            if(existeCedula)
+                throw new Exception($"La cedula ingresada esta siendo usada por otro cliente.");
 
             DbContext.Clientes.Add(new Models.Data.Cliente()
             {
@@ -139,6 +151,10 @@ namespace APIVentas.Services.Clientes
         public async Task<Models.DTOs.Cliente.OutputClienteDTO> Editar(string codigo, Models.DTOs.Cliente.InputClienteDTO nuevoInfoCliente)
         {
             var clienteActual = await DbContext.Clientes.FindAsync(codigo);
+            var existeCedula = await DbContext.Clientes.AnyAsync(c => c.Cedula == nuevoInfoCliente.Cedula);
+
+            if(existeCedula && clienteActual.Cedula != nuevoInfoCliente.Cedula)
+                throw new Exception($"La cedula ingresada esta siendo usada por otro cliente.");
 
             clienteActual.ClienteCodigo = codigo;
             clienteActual.Nombres = nuevoInfoCliente.Nombres == null ? clienteActual.Nombres : nuevoInfoCliente.Nombres;

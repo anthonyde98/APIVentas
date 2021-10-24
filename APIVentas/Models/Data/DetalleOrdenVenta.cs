@@ -9,12 +9,16 @@ namespace APIVentas.Models.Data
     {
         public int DetalleOrdenVentaId { get; set; }
         public string DetalleOrdenVentaCodigo { get; set; }
+        public string OrdenVentaCodigo { get; set; }
         public string ProductoCodigo { get; set; }
         public int ProductoCantidad { get; set; }
+        public decimal ValorNeto { get; set; }
+        public decimal ValorBruto { get; set; }
         public decimal DescuentoTotal { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaModificacion { get; set; }
 
+        public virtual OrdenVenta OrdenVentaCodigoNavigation { get; set; }
         public virtual Producto ProductoCodigoNavigation { get; set; }
     }
 }

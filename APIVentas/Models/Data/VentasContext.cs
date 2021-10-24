@@ -22,7 +22,7 @@ namespace APIVentas.Models.Data
         public virtual DbSet<OrdenVenta> OrdenVenta { get; set; }
         public virtual DbSet<Producto> Productos { get; set; }
         public virtual DbSet<ProductoCategoria> ProductoCategoria { get; set; }
-        public virtual DbSet<Vendedor> Vendedors { get; set; }
+        public virtual DbSet<Vendedor> Vendedores { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -40,11 +40,11 @@ namespace APIVentas.Models.Data
             modelBuilder.Entity<Cliente>(entity =>
             {
                 entity.HasKey(e => e.ClienteCodigo)
-                    .HasName("PK__Cliente__A062A53B5B1B4F00");
+                    .HasName("PK__Cliente__A062A53B81481D50");
 
                 entity.ToTable("Cliente");
 
-                entity.HasIndex(e => e.Cedula, "UQ__Cliente__415B7BE5BD896F8A")
+                entity.HasIndex(e => e.Cedula, "UQ__Cliente__415B7BE5949C7CB7")
                     .IsUnique();
 
                 entity.Property(e => e.ClienteCodigo)
@@ -100,7 +100,7 @@ namespace APIVentas.Models.Data
             modelBuilder.Entity<DetalleOrdenVenta>(entity =>
             {
                 entity.HasKey(e => e.DetalleOrdenVentaCodigo)
-                    .HasName("PK__DetalleO__B25A58E12E795E77");
+                    .HasName("PK__DetalleO__B25A58E1138FD815");
 
                 entity.Property(e => e.DetalleOrdenVentaCodigo)
                     .HasMaxLength(7)
@@ -122,12 +122,30 @@ namespace APIVentas.Models.Data
                     .HasColumnType("datetime")
                     .HasColumnName("fechaModificacion");
 
+                entity.Property(e => e.OrdenVentaCodigo)
+                    .IsRequired()
+                    .HasMaxLength(7)
+                    .HasColumnName("ordenVentaCodigo");
+
                 entity.Property(e => e.ProductoCantidad).HasColumnName("productoCantidad");
 
                 entity.Property(e => e.ProductoCodigo)
                     .IsRequired()
                     .HasMaxLength(7)
                     .HasColumnName("productoCodigo");
+
+                entity.Property(e => e.ValorBruto)
+                    .HasColumnType("decimal(10, 2)")
+                    .HasColumnName("valorBruto");
+
+                entity.Property(e => e.ValorNeto)
+                    .HasColumnType("decimal(10, 2)")
+                    .HasColumnName("valorNeto");
+
+                entity.HasOne(d => d.OrdenVentaCodigoNavigation)
+                    .WithMany(p => p.DetalleOrdenVenta)
+                    .HasForeignKey(d => d.OrdenVentaCodigo)
+                    .HasConstraintName("FK_OrdenVenta");
 
                 entity.HasOne(d => d.ProductoCodigoNavigation)
                     .WithMany(p => p.DetalleOrdenVenta)
@@ -138,7 +156,7 @@ namespace APIVentas.Models.Data
             modelBuilder.Entity<OrdenVenta>(entity =>
             {
                 entity.HasKey(e => e.OrdenVentaCodigo)
-                    .HasName("PK__OrdenVen__5D4D5DFFF60FE2C4");
+                    .HasName("PK__OrdenVen__5D4D5DFF657EE1BA");
 
                 entity.Property(e => e.OrdenVentaCodigo)
                     .HasMaxLength(7)
@@ -204,7 +222,7 @@ namespace APIVentas.Models.Data
             modelBuilder.Entity<Producto>(entity =>
             {
                 entity.HasKey(e => e.ProductoCodigo)
-                    .HasName("PK__Producto__D778113BED91D089");
+                    .HasName("PK__Producto__D778113B8CF4D70B");
 
                 entity.ToTable("Producto");
 
@@ -277,12 +295,12 @@ namespace APIVentas.Models.Data
             modelBuilder.Entity<ProductoCategoria>(entity =>
             {
                 entity.HasKey(e => e.CategoriaId)
-                    .HasName("PK__Producto__6378C0C050ABBB55");
+                    .HasName("PK__Producto__6378C0C0E2BA6FC1");
 
-                entity.HasIndex(e => e.Nombre, "UQ__Producto__72AFBCC69D426055")
+                entity.HasIndex(e => e.Nombre, "UQ__Producto__72AFBCC684865F36")
                     .IsUnique();
 
-                entity.HasIndex(e => e.CategoriaCodigo, "UQ__Producto__CA40B18B8D96550B")
+                entity.HasIndex(e => e.CategoriaCodigo, "UQ__Producto__CA40B18B9D325882")
                     .IsUnique();
 
                 entity.Property(e => e.CategoriaId).HasColumnName("categoriaId");
@@ -317,11 +335,11 @@ namespace APIVentas.Models.Data
             modelBuilder.Entity<Vendedor>(entity =>
             {
                 entity.HasKey(e => e.VendedorCodigo)
-                    .HasName("PK__Vendedor__55FBDA7EFB1B475C");
+                    .HasName("PK__Vendedor__55FBDA7E5C158DFA");
 
                 entity.ToTable("Vendedor");
 
-                entity.HasIndex(e => e.Cedula, "UQ__Vendedor__415B7BE5E42F4E4F")
+                entity.HasIndex(e => e.Cedula, "UQ__Vendedor__415B7BE5A669692F")
                     .IsUnique();
 
                 entity.Property(e => e.VendedorCodigo)

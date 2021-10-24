@@ -7,6 +7,11 @@ namespace APIVentas.Models.Data
 {
     public partial class OrdenVenta
     {
+        public OrdenVenta()
+        {
+            DetalleOrdenVenta = new HashSet<DetalleOrdenVenta>();
+        }
+
         public int OrdenVentaId { get; set; }
         public string OrdenVentaCodigo { get; set; }
         public DateTime OrdenFecha { get; set; }
@@ -22,5 +27,6 @@ namespace APIVentas.Models.Data
 
         public virtual Cliente ClienteCodigoNavigation { get; set; }
         public virtual Vendedor VendedorCodigoNavigation { get; set; }
+        public virtual ICollection<DetalleOrdenVenta> DetalleOrdenVenta { get; set; }
     }
 }

@@ -17,16 +17,24 @@ namespace APIVentas.Services.Productos.ProductoCategorias
             DbContext = dbContext;
         }
 
-        public async Task<List<Models.DTOs.Producto.ProductoCategoria.OutputProductoCategoriaDTO>> Buscar()
+        public async Task<List<Models.DTOs.Producto.ProductoCategoria.OutputProductoCategoriaDTO>> Buscar(int cantidad, int pagina)
         {
-            var Categorias = from categoria in DbContext.ProductoCategoria
-                             select new Models.DTOs.Producto.ProductoCategoria.OutputProductoCategoriaDTO()
-                             {
-                                 CategoriaCodigo = categoria.CategoriaCodigo,
-                                 Nombre = categoria.Nombre,
-                                 Descripcion = categoria.Descripcion,
-                                 Impuesto = categoria.Impuesto
-                             };
+            pagina = (pagina <= 0) ? 1 : pagina;
+            cantidad = (cantidad <= 0) ? 10 : cantidad;
+
+
+            var totalRecords = await DbContext.Productos.CountAsync();
+            var totalPages = Math.Ceiling((double)totalRecords / cantidad);
+
+            var skip = (pagina - 1) * cantidad;
+
+            var Categorias = DbContext.ProductoCategoria.Skip(skip).Take(cantidad).Select(categorias => new Models.DTOs.Producto.ProductoCategoria.OutputProductoCategoriaDTO()
+                            {
+                                CategoriaCodigo = categorias.CategoriaCodigo,
+                                Nombre = categorias.Nombre,
+                                Descripcion = categorias.Descripcion,
+                                Impuesto = categorias.Impuesto
+                            }).OrderBy(o => o.Nombre);
 
             return await Categorias.ToListAsync();
         }

@@ -17,25 +17,35 @@ namespace APIVentas.Services.Productos
             DbContext = dbContext;
         }
 
-        public async Task<List<Models.DTOs.Producto.OutputProductoDTO>> Buscar()
+        public async Task<List<Models.DTOs.Producto.OutputProductoDTO>> Buscar(int cantidad, int pagina)
         {
-            var Productos = from producto in DbContext.Productos
-                           from categoria in DbContext.ProductoCategoria
-                           where producto.CategoriaId == categoria.CategoriaId
-                           select new Models.DTOs.Producto.OutputProductoDTO()
-                           {
-                               ProductoCodigo = producto.ProductoCodigo,
-                               Nombre = producto.Nombre,
-                               PrecioEstandar = producto.PrecioEstandar,
-                               Descuento = producto.Descuento,
-                               Tamanio = producto.Tamanio,
-                               Peso = producto.Peso,
-                               Categoria = categoria.Nombre,
-                               FechaFinVenta = Convert.ToString(producto.FechaFinVenta),
-                               FechaInicioVenta = Convert.ToString(producto.FechaInicioVenta),
-                               Empresa = producto.Empresa
+            pagina = (pagina <= 0) ? 1 : pagina;
+            cantidad = (cantidad <= 0) ? 10 : cantidad;
 
-                           };
+
+            var totalRecords = await DbContext.ProductoCategoria.CountAsync();
+            var totalPages = Math.Ceiling((double)totalRecords / cantidad);
+
+            var skip = (pagina - 1) * cantidad;
+
+            var Productos = (from producto in DbContext.Productos
+                             from categoria in DbContext.ProductoCategoria
+                             where producto.CategoriaId == categoria.CategoriaId
+                             select new Models.DTOs.Producto.OutputProductoDTO()
+                             {
+                                 ProductoCodigo = producto.ProductoCodigo,
+                                 Nombre = producto.Nombre,
+                                 PrecioEstandar = producto.PrecioEstandar,
+                                 Descuento = producto.Descuento,
+                                 Tamanio = producto.Tamanio,
+                                 Peso = producto.Peso,
+                                 Categoria = categoria.Nombre,
+                                 FechaFinVenta = Convert.ToString(producto.FechaFinVenta),
+                                 FechaInicioVenta = Convert.ToString(producto.FechaInicioVenta),
+                                 Empresa = producto.Empresa
+
+                             }).Skip(skip).Take(cantidad).OrderBy(o => o.Nombre);
+
 
             return await Productos.ToListAsync();
         }
@@ -48,7 +58,6 @@ namespace APIVentas.Services.Productos
                             where producto.CategoriaId == categoria.CategoriaId && producto.ProductoCodigo == codigo
                             select new Models.DTOs.Producto.OutputProductoDTO()
                             {
-                                ProductoCodigo = producto.ProductoCodigo,
                                 Nombre = producto.Nombre,
                                 PrecioEstandar = producto.PrecioEstandar,
                                 Descuento = producto.Descuento,

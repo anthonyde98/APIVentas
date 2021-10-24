@@ -7,10 +7,9 @@ namespace APIVentas.Models.DTOs.Venta
 {
     public class InputOrdenVentaDTO
     {
-        public DateTime OrdenFecha { get; set; }
         public decimal ValorPagado { get; set; }
         public string VendedorCodigo { get; set; }
         public string ClienteCodigo { get; set; }
-        public List<DetalleOrdenVentaDTO> Productos { get; set; }
+        public List<DetalleOrdenVenta.InputDetalleOrdenVentaDTO> Productos { get; set; }
     }
 }

@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using APIVentas.Services.Clientes;
-
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace APIVentas.Controllers
@@ -13,20 +11,23 @@ namespace APIVentas.Controllers
     [ApiController]
     public class ClientesController : ControllerBase
     {
-        public readonly ICliente ClienteManager;
+        public readonly Services.Clientes.ICliente ClienteManager;
+        public readonly Services.Ventas.IVenta VentaManager;
 
-        public ClientesController(ICliente clienteManager)
+        public ClientesController(Services.Clientes.ICliente clienteManager,
+                                  Services.Ventas.IVenta ventaManager)
         {
             ClienteManager = clienteManager;
+            VentaManager = ventaManager;
         }
 
         // GET: api/<ClientesController>
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpGet]                            //---------------------Paginacion-----------------------//
+        public async Task<IActionResult> Get([FromQuery] int cantidad = 10, [FromQuery] int pagina = 1)
         {
             try
             {
-                var Clientes = await ClienteManager.Buscar();
+                var Clientes = await ClienteManager.Buscar(cantidad, pagina);
 
                 return Ok(Clientes);
             }
@@ -108,6 +109,29 @@ namespace APIVentas.Controllers
                 var codigoCliente = await ClienteManager.Eliminar(codigo);
 
                 return Ok(new { message = "El cliente " + codigoCliente + " fue eliminado con exito." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //-------------------------------------------CLIENTE ORDEN DE VENTA-------------------------------------------//
+        //------------------------------------------------------------------------------------------------------------//
+
+        [HttpGet("Ordenes/")]
+        public async Task<IActionResult> GetOrdenes([FromHeader] string codigo)
+        {
+            try
+            {
+                var respuesta = await VentaManager.ExisteOrdenPorCliente(codigo);
+
+                if (!respuesta)
+                    return NotFound();
+
+                var Detalle = await VentaManager.BuscarOrdenPorCliente(codigo);
+
+                return Ok(Detalle);
             }
             catch (Exception ex)
             {

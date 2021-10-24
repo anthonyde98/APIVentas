@@ -23,12 +23,12 @@ namespace APIVentas.Controllers
         }
 
         // GET: api/<ProductosController>
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpGet]                            //---------------------Paginacion-----------------------//
+        public async Task<IActionResult> Get([FromQuery] int cantidad = 10, [FromQuery] int pagina = 1)
         {
             try
             {
-                var Productos = await ProductoManager.Buscar();
+                var Productos = await ProductoManager.Buscar(cantidad, pagina);
 
                 return Ok(Productos);
             }
@@ -120,12 +120,12 @@ namespace APIVentas.Controllers
         //-------------------------------------------PRODUCTO CATEGORIA-------------------------------------------//
         //--------------------------------------------------------------------------------------------------------//
         [HttpGet]
-        [Route("Categorias/")]
-        public async Task<IActionResult> GetAllCategorias()
+        [Route("Categorias/")]                            //---------------------Paginacion-----------------------//
+        public async Task<IActionResult> GetAllCategorias([FromQuery] int cantidad = 10, [FromQuery] int pagina = 1)
         {
             try
             {
-                var Categorias = await ProductoCategoriaManager.Buscar();
+                var Categorias = await ProductoCategoriaManager.Buscar(cantidad, pagina);
 
                 return Ok(Categorias);
             }
