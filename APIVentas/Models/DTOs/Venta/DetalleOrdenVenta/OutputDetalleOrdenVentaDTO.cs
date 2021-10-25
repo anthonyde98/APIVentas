@@ -11,8 +11,8 @@ namespace APIVentas.Models.DTOs.Venta.DetalleOrdenVenta
         public string ProductoCodigo { get; set; }
         public string ProductoNombre { get; set; }
         public int ProductoCantidad { get; set; }
-        public decimal ValorNeto { get; set; }
-        public decimal ValorBruto { get; set; }
+        public decimal ValorFinal { get; set; }
+        public decimal ValorInicial{ get; set; }
         public decimal DescuentoTotal { get; set; }
     }
 }

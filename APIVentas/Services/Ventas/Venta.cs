@@ -37,8 +37,8 @@ namespace APIVentas.Services.Ventas
                                              DbContext.Clientes.Where(c => c.ClienteCodigo == ventas.ClienteCodigo).Select(x => x.Apellidos).SingleOrDefault(),
                              VendedorNombre = DbContext.Vendedores.Where(v => v.VendedorCodigo == ventas.VendedorCodigo).Select(x => x.Nombres).SingleOrDefault() + " " +
                                               DbContext.Vendedores.Where(v => v.VendedorCodigo == ventas.VendedorCodigo).Select(x => x.Apellidos).SingleOrDefault(),
-                             ValorCantidadBruto = ventas.ValorCantidadBruto,
-                             ValorCantidadNeto = ventas.ValorCantidadNeto,
+                             ValorCantidadInicial = ventas.ValorCantidadBruto,
+                             ValorCantidadFinal = ventas.ValorCantidadNeto,
                              DescuentoTotalOrden = ventas.DescuentoTotalOrden,
                              ValorPagado = ventas.ValorPagado,
                              ValorDevuelto = ventas.ValorDevuelto,
@@ -50,8 +50,8 @@ namespace APIVentas.Services.Ventas
                                              ProductoNombre = DbContext.Productos.Where(p => p.ProductoCodigo == detalle.ProductoCodigo)
                                                                                  .Select(x => x.Nombre).SingleOrDefault(),
                                              ProductoCantidad = detalle.ProductoCantidad,
-                                             ValorNeto = detalle.ValorNeto,
-                                             ValorBruto = detalle.ValorBruto,
+                                             ValorFinal = detalle.ValorNeto,
+                                             ValorInicial = detalle.ValorBruto,
                                              DescuentoTotal = detalle.DescuentoTotal
 
                                          }).ToList()
@@ -72,8 +72,8 @@ namespace APIVentas.Services.Ventas
                                              DbContext.Clientes.Where(c => c.ClienteCodigo == venta.ClienteCodigo).Select(x => x.Apellidos).SingleOrDefault(),
                              VendedorNombre = DbContext.Vendedores.Where(v => v.VendedorCodigo == venta.VendedorCodigo).Select(x => x.Nombres).SingleOrDefault() + " " +
                                               DbContext.Vendedores.Where(v => v.VendedorCodigo == venta.VendedorCodigo).Select(x => x.Apellidos).SingleOrDefault(),
-                             ValorCantidadBruto = venta.ValorCantidadBruto,
-                             ValorCantidadNeto = venta.ValorCantidadNeto,
+                             ValorCantidadInicial = venta.ValorCantidadBruto,
+                             ValorCantidadFinal = venta.ValorCantidadNeto,
                              DescuentoTotalOrden = venta.DescuentoTotalOrden,
                              ValorPagado = venta.ValorPagado,
                              ValorDevuelto = venta.ValorDevuelto,
@@ -85,8 +85,8 @@ namespace APIVentas.Services.Ventas
                                               ProductoNombre = DbContext.Productos.Where(p => p.ProductoCodigo == detalle.ProductoCodigo)
                                                                                   .Select(x => x.Nombre).SingleOrDefault(),
                                               ProductoCantidad = detalle.ProductoCantidad,
-                                              ValorNeto = detalle.ValorNeto,
-                                              ValorBruto = detalle.ValorBruto,
+                                              ValorFinal = detalle.ValorNeto,
+                                              ValorInicial = detalle.ValorBruto,
                                               DescuentoTotal = detalle.DescuentoTotal
 
                                           }).ToList()
@@ -163,8 +163,8 @@ namespace APIVentas.Services.Ventas
                     DescuentoTotal = valores.Descuento * producto.ProductoCantidad,
                     DetalleOrdenVentaCodigo = await CrearCodigo('c'),
                     OrdenVentaCodigo = ordenCodigo,
-                    ValorBruto = valores.PrecioEstandar * producto.ProductoCantidad,
-                    ValorNeto = (valores.PrecioEstandar + valores.Descuento) * producto.ProductoCantidad,
+                    ValorBruto = (valores.PrecioEstandar + valores.Descuento) * producto.ProductoCantidad,
+                    ValorNeto = valores.PrecioEstandar * producto.ProductoCantidad,
                     ProductoCantidad = producto.ProductoCantidad,
                     FechaCreacion = DateTime.Now,
                     FechaModificacion = DateTime.Now
@@ -242,8 +242,8 @@ namespace APIVentas.Services.Ventas
                                              DbContext.Clientes.Where(c => c.ClienteCodigo == ordenes.ClienteCodigo).Select(x => x.Apellidos).SingleOrDefault(),
                               VendedorNombre = DbContext.Vendedores.Where(v => v.VendedorCodigo == ordenes.VendedorCodigo).Select(x => x.Nombres).SingleOrDefault() + " " +
                                               DbContext.Vendedores.Where(v => v.VendedorCodigo == ordenes.VendedorCodigo).Select(x => x.Apellidos).SingleOrDefault(),
-                              ValorCantidadBruto = ordenes.ValorCantidadBruto,
-                              ValorCantidadNeto = ordenes.ValorCantidadNeto,
+                              ValorCantidadInicial = ordenes.ValorCantidadBruto,
+                              ValorCantidadFinal = ordenes.ValorCantidadNeto,
                               DescuentoTotalOrden = ordenes.DescuentoTotalOrden,
                               ValorPagado = ordenes.ValorPagado,
                               ValorDevuelto = ordenes.ValorDevuelto,
@@ -255,8 +255,8 @@ namespace APIVentas.Services.Ventas
                                                ProductoNombre = DbContext.Productos.Where(p => p.ProductoCodigo == detalle.ProductoCodigo)
                                                                                    .Select(x => x.Nombre).SingleOrDefault(),
                                                ProductoCantidad = detalle.ProductoCantidad,
-                                               ValorNeto = detalle.ValorNeto,
-                                               ValorBruto = detalle.ValorBruto,
+                                               ValorFinal = detalle.ValorNeto,
+                                               ValorInicial = detalle.ValorBruto,
                                                DescuentoTotal = detalle.DescuentoTotal
 
                                            }).ToList()
@@ -286,8 +286,8 @@ namespace APIVentas.Services.Ventas
                                              DbContext.Clientes.Where(c => c.ClienteCodigo == ordenes.ClienteCodigo).Select(x => x.Apellidos).SingleOrDefault(),
                               VendedorNombre = DbContext.Vendedores.Where(v => v.VendedorCodigo == ordenes.VendedorCodigo).Select(x => x.Nombres).SingleOrDefault() + " " +
                                               DbContext.Vendedores.Where(v => v.VendedorCodigo == ordenes.VendedorCodigo).Select(x => x.Apellidos).SingleOrDefault(),
-                              ValorCantidadBruto = ordenes.ValorCantidadBruto,
-                              ValorCantidadNeto = ordenes.ValorCantidadNeto,
+                              ValorCantidadInicial = ordenes.ValorCantidadBruto,
+                              ValorCantidadFinal = ordenes.ValorCantidadNeto,
                               DescuentoTotalOrden = ordenes.DescuentoTotalOrden,
                               ValorPagado = ordenes.ValorPagado,
                               ValorDevuelto = ordenes.ValorDevuelto,
@@ -299,8 +299,8 @@ namespace APIVentas.Services.Ventas
                                                ProductoNombre = DbContext.Productos.Where(p => p.ProductoCodigo == detalle.ProductoCodigo)
                                                                                    .Select(x => x.Nombre).SingleOrDefault(),
                                                ProductoCantidad = detalle.ProductoCantidad,
-                                               ValorNeto = detalle.ValorNeto,
-                                               ValorBruto = detalle.ValorBruto,
+                                               ValorFinal = detalle.ValorNeto,
+                                               ValorInicial = detalle.ValorBruto,
                                                DescuentoTotal = detalle.DescuentoTotal
 
                                            }).ToList()

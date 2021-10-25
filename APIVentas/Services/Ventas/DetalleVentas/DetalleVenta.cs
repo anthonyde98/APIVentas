@@ -34,9 +34,9 @@ namespace APIVentas.Services.Ventas.DetalleVentas
                 ProductoNombre = DbContext.Productos.Where(p => p.ProductoCodigo == detalles.ProductoCodigo)
                                                                     .Select(x => x.Nombre).SingleOrDefault(),
                 ProductoCantidad = detalles.ProductoCantidad,
-                ValorBruto = detalles.ValorBruto,
+                ValorInicial = detalles.ValorBruto,
                 DescuentoTotal = detalles.DescuentoTotal,
-                ValorNeto = detalles.ValorNeto
+                ValorFinal = detalles.ValorNeto
 
             }).OrderBy(o => o.ProductoNombre);
 
@@ -60,9 +60,9 @@ namespace APIVentas.Services.Ventas.DetalleVentas
                               ProductoNombre = DbContext.Productos.Where(p => p.ProductoCodigo == detalle.ProductoCodigo)
                                                                   .Select(x => x.Nombre).SingleOrDefault(),
                               ProductoCantidad = detalle.ProductoCantidad,
-                              ValorBruto = detalle.ValorBruto,
+                              ValorInicial = detalle.ValorBruto,
                               DescuentoTotal = detalle.DescuentoTotal,
-                              ValorNeto = detalle.ValorNeto
+                              ValorFinal = detalle.ValorNeto
                           };
 
             return await Detalle.SingleOrDefaultAsync();
