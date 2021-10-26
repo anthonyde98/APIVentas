@@ -94,7 +94,7 @@ namespace APIVentas.Services.Vendedores
 
         public async Task<Models.DTOs.Vendedor.InputVendedorDTO> Crear(Models.DTOs.Vendedor.InputVendedorDTO nuevoVendedor)
         {
-            var existeCedula = await DbContext.Clientes.AnyAsync(c => c.Cedula == nuevoVendedor.Cedula);
+            var existeCedula = await DbContext.Vendedores.AnyAsync(c => c.Cedula == nuevoVendedor.Cedula);
             string vendedorCodigo = await CrearCodigo(nuevoVendedor.Nombres, nuevoVendedor.Apellidos);
 
             if(existeCedula)
