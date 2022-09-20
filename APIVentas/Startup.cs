@@ -40,7 +40,13 @@ namespace APIVentas
             {
                 options.JsonSerializerOptions.IgnoreNullValues = true ;               
             });
-        }
+
+            services.AddCors(options => options.AddPolicy("AllowWebApp",
+                                       builder => builder.AllowAnyOrigin()
+                                                         .AllowAnyHeader()
+                                                         .AllowAnyMethod()));
+        
+    }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -49,6 +55,8 @@ namespace APIVentas
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("AllowWebApp");
 
             app.UseHttpsRedirection();
 
